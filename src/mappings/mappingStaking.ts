@@ -2,6 +2,7 @@ import { SubstrateBlock, SubstrateEvent } from "@subql/types";
 import { Balance, BlockNumber } from "@polkadot/types/interfaces";
 import { Compact } from "@polkadot/types";
 import {
+  ParaAccountInfo,
   StakingBonded,
   StakingErapaid,
   StakingPayoutstarte,
@@ -31,6 +32,16 @@ export async function staking(block: SubstrateBlock): Promise<void> {
     record.data = data.toString();
     await record.save();
   }
+  const result = await api.query.system.account('F7fq1jMmNj5j2jAHcBxgM26JzUn2N4duXu1U4UZNdkfZEPV');
+  const balanceRecord = new ParaAccountInfo(blockNumber.toString());
+  balanceRecord.block_height = blockNumber;
+  balanceRecord.block_timestamp = block.timestamp;
+  balanceRecord.free = (result.data.free as Balance).toBigInt();
+  balanceRecord.reserved =(result.data.reserved as Balance).toBigInt();
+  balanceRecord.miscFrozen =(result.data.miscFrozen as Balance).toBigInt();
+  balanceRecord.feeFrozen =(result.data.feeFrozen as Balance).toBigInt();
+
+  await balanceRecord.save();
   return;
 }
 
@@ -95,26 +106,6 @@ export async function handleStakinUnbonded(
   await record.save();
 }
 
-// export async function handleStakingKicked(
-//   event: SubstrateEvent
-// ): Promise<void> {
-//   const blockNumber = event.block.block.header.number.toNumber();
-//   const record = new StakingKicked(`${blockNumber}-${event.idx.toString()}`);
-//   const {
-//     event: {
-//       data: [nominator, stash],
-//     },
-//   } = event;
-//
-//   record.event_id = event.idx;
-//   record.block_height = blockNumber;
-//   record.block_timestamp = event.block.timestamp;
-//   record.nominator = nominator.toString();
-//   record.stash = stash.toString();
-//
-//   await record.save();
-// }
-
 export async function handleStakingWithdrawn(
   event: SubstrateEvent
 ): Promise<void> {
@@ -134,45 +125,6 @@ export async function handleStakingWithdrawn(
 
   await record.save();
 }
-
-// export async function handleStakingChilled(
-//   event: SubstrateEvent
-// ): Promise<void> {
-//   const blockNumber = event.block.block.header.number.toNumber();
-//   const record = new StakingChilled(`${blockNumber}-${event.idx.toString()}`);
-//   const {
-//     event: {
-//       data: [account],
-//     },
-//   } = event;
-//
-//   record.event_id = event.idx;
-//   record.block_height = blockNumber;
-//   record.block_timestamp = event.block.timestamp;
-//   record.account = account.toString();
-//
-//   await record.save();
-// }
-//
-// export async function handleStakingSlashed(
-//   event: SubstrateEvent
-// ): Promise<void> {
-//   const blockNumber = event.block.block.header.number.toNumber();
-//   const record = new StakingSlashed(`${blockNumber}-${event.idx.toString()}`);
-//   const {
-//     event: {
-//       data: [account, balance],
-//     },
-//   } = event;
-//
-//   record.event_id = event.idx;
-//   record.block_height = blockNumber;
-//   record.block_timestamp = event.block.timestamp;
-//   record.balance = (balance as Balance)?.toBigInt();
-//   record.account = account.toString();
-//
-//   await record.save();
-// }
 
 export async function handleStakingPayoutstarte(
   event: SubstrateEvent

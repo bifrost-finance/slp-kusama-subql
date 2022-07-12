@@ -36,21 +36,6 @@ dataSources:
           filter:
             module: staking
             method: Withdrawn
-#        - handler: handleStakingKicked
-#          kind: substrate/EventHandler
-#          filter:
-#            module: staking
-#            method: Kicked
-#        - handler: handleStakingChilled
-#          kind: substrate/EventHandler
-#          filter:
-#            module: staking
-#            method: Chilled
-#        - handler: handleStakingSlashed
-#          kind: substrate/EventHandler
-#          filter:
-#            module: staking
-#            method: Slashed
         - handler: handleStakingPayoutstarte
           kind: substrate/EventHandler
           filter:
