@@ -55,6 +55,7 @@ export async function handleStakingErapaid(
       data: [index, validator_payout, remainder],
     },
   } = event;
+  const erasTotalStake= await api.query.staking.erasTotalStake(index);
 
   record.event_id = event.idx;
   record.block_height = blockNumber;
@@ -62,6 +63,7 @@ export async function handleStakingErapaid(
   record.era_index = index.toString();
   record.validator_payout = (validator_payout as Balance)?.toBigInt();
   record.remainder = (remainder as Balance)?.toBigInt();
+  record.total_staked = (erasTotalStake as Balance)?.toBigInt();
 
   await record.save();
 }
