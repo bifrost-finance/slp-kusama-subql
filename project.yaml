@@ -10,7 +10,7 @@ network:
   endpoint: 'wss://kusama-rpc.liebi.com/ws'
 dataSources:
   - kind: substrate/Runtime
-    startBlock: 12394220
+    startBlock: 14893351
     mapping:
       file: ./dist/index.js
       handlers:
