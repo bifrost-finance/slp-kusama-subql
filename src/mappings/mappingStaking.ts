@@ -5,10 +5,10 @@ import {
   ParaAccountInfo,
   StakingBonded,
   StakingErapaid,
+  StakingInfo,
   StakingPayoutstarte,
   StakingUnbonded,
   StakingWithdrawn,
-  StakingInfo,
 } from "../types";
 
 export async function staking(block: SubstrateBlock): Promise<void> {
@@ -16,7 +16,7 @@ export async function staking(block: SubstrateBlock): Promise<void> {
     block.block.header.number as Compact<BlockNumber>
   ).toBigInt();
   const stakingEvents = block.events.filter(
-      (e) => e.event.section === "staking"
+    (e) => e.event.section === "staking"
   ) as unknown as SubstrateEvent[];
 
   for (let stakingEvent of stakingEvents) {
@@ -32,14 +32,28 @@ export async function staking(block: SubstrateBlock): Promise<void> {
     record.data = data.toString();
     await record.save();
   }
-  const result = await api.query.system.account('F7fq1jMmNj5j2jAHcBxgM26JzUn2N4duXu1U4UZNdkfZEPV');
+  const result = await api.query.system.account(
+    "F7fq1jMmNj5j2jAHcBxgM26JzUn2N4duXu1U4UZNdkfZEPV"
+  );
   const balanceRecord = new ParaAccountInfo(blockNumber.toString());
   balanceRecord.block_height = blockNumber;
   balanceRecord.block_timestamp = block.timestamp;
   balanceRecord.free = (result.data.free as Balance)?.toBigInt();
-  balanceRecord.reserved =(result.data.reserved as Balance)?.toBigInt();
-  balanceRecord.miscFrozen =(result.data.miscFrozen as Balance)?.toBigInt();
-  balanceRecord.feeFrozen =(result.data.feeFrozen as Balance)?.toBigInt();
+  balanceRecord.reserved = (result.data.reserved as Balance)?.toBigInt();
+  balanceRecord.feeFrozen = (result.data.frozen as Balance)?.toBigInt();
+
+  const delegators = await Promise.all(
+    [
+      "EckcmXbCj4huvNLP5btMFmJz8SzEt5s8hgKcL6LM8BtZeAf",
+      "J3Kp9LPQpRvVmJmmEuYJjW2UFnSQptZ3pbpSZbFLLgWF7WR",
+      "DFw6MtEaT5PSZHzd43UW2YnEx4GNzAfCzejruhBt1tnBJaF",
+      "DNaN64ohZRko1c7PbrgK1LJC96yQdZ23241H2erKUz7XQwy",
+      "DgB3P2Rwvbb2ZsUgWKRMJwuDUq92HqiM295ezLsJT5GSeKd",
+    ].map(async (account) => (await api.query.system.account(account)).data.free)
+  ) as unknown as number[];
+
+  // save delegators amount in miscFrozen
+  balanceRecord.miscFrozen = delegators.reduce((a, c) => BigInt(a) + BigInt(c), BigInt(0)) as unknown as bigint;
 
   await balanceRecord.save();
   return;
@@ -55,7 +69,9 @@ export async function handleStakingErapaid(
       data: [index, validator_payout, remainder],
     },
   } = event;
-  const erasTotalStake= await api.query.staking.erasTotalStake(Number(index.toString())-1);
+  const erasTotalStake = await api.query.staking.erasTotalStake(
+    Number(index.toString()) - 1
+  );
 
   record.event_id = event.idx;
   record.block_height = blockNumber;
