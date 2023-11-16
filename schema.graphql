@@ -16,7 +16,6 @@ type ParaAccountInfo @entity {
   feeFrozen:BigInt
 }
 
-
 type StakingErapaid @entity {
   id: ID!
   event_id: Int!
@@ -55,32 +54,6 @@ type StakingWithdrawn @entity {
   account: String
 }
 
-#type StakingKicked @entity {
-#  id: ID!
-#  event_id: Int!
-#  block_height: Int!
-#  block_timestamp: Date!
-#  nominator: String
-#  stash: String
-#}
-
-#type StakingChilled @entity {
-#  id: ID!
-#  event_id: Int!
-#  block_height: Int!
-#  block_timestamp: Date!
-#  account: String
-#}
-
-#type StakingSlashed @entity {
-#  id: ID!
-#  event_id: Int!
-#  block_height: Int!
-#  block_timestamp: Date!
-#  balance: BigInt
-#  account: String
-#}
-
 type StakingPayoutstarte @entity {
   id: ID!
   event_id: Int!
@@ -89,15 +62,3 @@ type StakingPayoutstarte @entity {
   era_index: String
   account: String
 }
-
-type Remarked @entity {
-  id: ID!
-  event_id: Int!
-  block_height: Int!
-  block_timestamp: Date!
-  account: String
-  result: String
-  hash: String
-}
-
-
