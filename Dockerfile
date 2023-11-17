@@ -1,10 +1,12 @@
-FROM onfinality/subql-node:latest 
+FROM node:18 as builder
 
-COPY . /app
-# RUN cd /app && yarn
-# RUN cd /app && yarn build
+WORKDIR /app
+COPY . ./
 
-# FROM onfinality/subql-node:latest
-# COPY project.yaml /app/project.yaml
-# COPY project.yaml /project.yaml
-# COPY --from=builder /app/dist /app/dist
+RUN yarn
+RUN yarn codegen
+RUN yarn build
+
+FROM onfinality/subql-node:latest
+
+COPY --from=builder /app/ /app/
