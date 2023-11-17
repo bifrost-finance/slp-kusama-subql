@@ -1,4 +1,4 @@
-IMAGE=harbor.liebi.com/slp/kusama-subql:v1.5
+IMAGE=harbor.liebi.com/slp/kusama-subql:v1.8
 
 deploy:
 	docker build -f Dockerfile -t ${IMAGE} .
