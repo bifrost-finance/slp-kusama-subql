@@ -1,7 +1,7 @@
-Dockerfile
-.dockerignore
 node_modules
-npm-debug.log
 dist
-deploy
-scripts
+.git
+coverage
+tsconfig.tsbuildinfo
+.history
+yarn.lock
