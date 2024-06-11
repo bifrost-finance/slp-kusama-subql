@@ -29,7 +29,7 @@ export async function staking(block: SubstrateBlock): Promise<void> {
   }
   const result = await api.query.system.account(
     "F7fq1jMmNj5j2jAHcBxgM26JzUn2N4duXu1U4UZNdkfZEPV"
-  );
+  ) as any;
   const balanceRecord = new ParaAccountInfo(blockNumber.toString(), blockNumber, block.timestamp);
 
   balanceRecord.free = (result.data.free as Balance)?.toBigInt();
@@ -43,7 +43,7 @@ export async function staking(block: SubstrateBlock): Promise<void> {
       "DFw6MtEaT5PSZHzd43UW2YnEx4GNzAfCzejruhBt1tnBJaF",
       "DNaN64ohZRko1c7PbrgK1LJC96yQdZ23241H2erKUz7XQwy",
       "DgB3P2Rwvbb2ZsUgWKRMJwuDUq92HqiM295ezLsJT5GSeKd",
-    ].map(async (account) => (await api.query.system.account(account)).data.free)
+    ].map(async (account) => (await api.query.system.account(account) as any).data.free)
   ) as unknown as number[];
 
   // save delegators amount in miscFrozen
@@ -70,7 +70,7 @@ export async function handleStakingErapaid(
   record.era_index = index.toString();
   record.validator_payout = (validator_payout as Balance)?.toBigInt();
   record.remainder = (remainder as Balance)?.toBigInt();
-  record.total_staked = (erasTotalStake as Balance)?.toBigInt();
+  record.total_staked = (erasTotalStake as any)?.toBigInt();
 
   await record.save();
 }
