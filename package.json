@@ -16,7 +16,7 @@
   "author": "Bifrost",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@polkadot/api": "^10",
+    "@polkadot/api": "latest",
     "@subql/cli": "latest",
     "@subql/node": "latest",
     "@subql/types": "latest",
