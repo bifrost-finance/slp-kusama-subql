@@ -1,50 +1,33 @@
+# // Auto-generated , DO NOT EDIT
 specVersion: 1.0.0
-name: slp-kusama-subql
-version: 1.0.0
+version: 0.0.1
+name: kusama-starter
+description: >-
+  This project can be used as a starting point for developing your SubQuery
+  project. It indexes all transfers on Kusama network
 runner:
   node:
-    name: "@subql/node"
-    version: "*"
+    name: '@subql/node'
+    version: '>=3.0.1'
   query:
-    name: "@subql/query"
-    version: "*"
-description: This SubQuery project can be use as a starting point for Kusama network
-repository: "https://github.com/bifrost-finance/slp-kusama-subql.git"
+    name: '@subql/query'
+    version: '*'
 schema:
   file: ./schema.graphql
 network:
-  chainId: "0xb0a8d493285c2df73290dfb7e61f870f17b41801197a149ca93654499ea3dafe"
-  endpoint: ["wss://kusama-rpc.polkadot.io","wss://1rpc.io/ksm","wss://kusama-rpc.dwellir.com"]
+  chainId: '0xb0a8d493285c2df73290dfb7e61f870f17b41801197a149ca93654499ea3dafe'
+  endpoint:
+    - wss://ksm-rpc.stakeworld.io
 dataSources:
   - kind: substrate/Runtime
-    startBlock: 14914880
+    startBlock: 23565536
     mapping:
       file: ./dist/index.js
       handlers:
-        - handler: staking
-          kind: substrate/BlockHandler
-        - handler: handleStakingErapaid
-          kind: substrate/EventHandler
+        - kind: substrate/BlockHandler
+          handler: staking
+        - kind: substrate/EventHandler
+          handler: handleStakingErapaid
           filter:
             module: staking
             method: EraPaid
-        - handler: handleStakingBonded
-          kind: substrate/EventHandler
-          filter:
-            module: staking
-            method: Bonded
-        - handler: handleStakinUnbonded
-          kind: substrate/EventHandler
-          filter:
-            module: staking
-            method: Unbonded
-        - handler: handleStakingWithdrawn
-          kind: substrate/EventHandler
-          filter:
-            module: staking
-            method: Withdrawn
-        - handler: handleStakingPayoutstarte
-          kind: substrate/EventHandler
-          filter:
-            module: staking
-            method: PayoutStarted
