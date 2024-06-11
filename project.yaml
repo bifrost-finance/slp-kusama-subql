@@ -31,3 +31,23 @@ dataSources:
           filter:
             module: staking
             method: EraPaid
+        - kind: substrate/EventHandler
+          handler: handleStakingBonded
+          filter:
+            module: staking
+            method: Bonded
+        - kind: substrate/EventHandler
+          handler: handleStakinUnbonded
+          filter:
+            module: staking
+            method: Unbonded
+        - kind: substrate/EventHandler
+          handler: handleStakingWithdrawn
+          filter:
+            module: staking
+            method: Withdrawn
+        - kind: substrate/EventHandler
+          handler: handleStakingPayoutstarte
+          filter:
+            module: staking
+            method: PayoutStarted

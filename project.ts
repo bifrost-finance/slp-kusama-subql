@@ -59,6 +59,38 @@ const project: SubstrateProject = {
                             method: "EraPaid",
                         },
                     },
+                    {
+                        kind: SubstrateHandlerKind.Event,
+                        handler: "handleStakingBonded",
+                        filter: {
+                            module: "staking",
+                            method: "Bonded",
+                        },
+                    },
+                    {
+                        kind: SubstrateHandlerKind.Event,
+                        handler: "handleStakinUnbonded",
+                        filter: {
+                            module: "staking",
+                            method: "Unbonded",
+                        },
+                    },
+                    {
+                        kind: SubstrateHandlerKind.Event,
+                        handler: "handleStakingWithdrawn",
+                        filter: {
+                            module: "staking",
+                            method: "Withdrawn",
+                        },
+                    },
+                    {
+                        kind: SubstrateHandlerKind.Event,
+                        handler: "handleStakingPayoutstarte",
+                        filter: {
+                            module: "staking",
+                            method: "PayoutStarted",
+                        },
+                    },
                 ],
             },
         },
